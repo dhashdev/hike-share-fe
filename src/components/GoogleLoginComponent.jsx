@@ -2,15 +2,16 @@ import React from 'react';
 import { GoogleLogin, googleLogout } from '@react-oauth/google';
 import { jwtDecode } from 'jwt-decode';
 import { client } from '../client';
+import { useNavigate } from 'react-router-dom';
 import hikeShareVid from '../assests/hikeShare_vid.mp4';
 import logo from '../assests/logo.png';
 
 const GoogleLoginComponent = () => {
+  const navigate = useNavigate();
   // Logout function to log the user out of Google and clear the local storage
   const logOut = () => {
     googleLogout();
     localStorage.clear();
-    console.log('Logout success');
   };
 
   return (
@@ -55,8 +56,9 @@ const GoogleLoginComponent = () => {
                   };
 
                   // Create schema
-                  await client.createIfNotExists(doc);
-                  console.log('Success navigate');
+                  await client.createIfNotExists(doc).then(() => {
+                    navigate('/');
+                  });
                 } catch (error) {
                   console.error('Error creating schema', error);
                 }
